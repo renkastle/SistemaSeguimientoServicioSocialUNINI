@@ -1,0 +1,471 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Plataforma de Servicio Social – Aprende con Reyhan</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Domine:wght@400..700&display=swap"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;600;700;800&display=swap">
+<style>
+  * { box-sizing: border-box; margin: 0; }
+  html, body { height: 100%; background: #0a1f1d; overflow: hidden; }
+  #stage { position: absolute; left: 50%; top: 50%; width: 1920px; height: 1080px; transform-origin: center; }
+  .slide { position: absolute; inset: 0; width: 1920px; height: 1080px; overflow: hidden; }
+  .slide:not(.active) { display: none !important; }
+  .slide aside { display: none; }
+  .slide ul { padding-left: 1.2em; }
+  .slide table { border-collapse: collapse; width: 100%; overflow: hidden; }
+  .slide th, .slide td { text-align: left; padding: 18px 32px; border-bottom: 1px solid #DCE6E3; }
+  .slide p[style*="align-self:end"] { align-self: flex-end !important; }
+  .slide p[style*="align-self:start"] { align-self: flex-start !important; }
+  #bar { position: fixed; left: 0; right: 0; bottom: 0; display: flex; gap: 12px; align-items: center; justify-content: center;
+         padding: 10px 16px; font: 14px 'Nunito Sans', Arial, sans-serif; color: #CFE3DF; background: rgba(10,31,29,.85); opacity: 0; transition: opacity .2s; }
+  body:hover #bar, #bar:focus-within { opacity: 1; }
+  #bar button { font: inherit; color: inherit; background: #0F766E; border: 0; border-radius: 6px; padding: 6px 12px; cursor: pointer; }
+  #notes { position: fixed; left: 16px; right: 16px; bottom: 56px; max-height: 30vh; overflow: auto; display: none;
+           padding: 16px 20px; border-radius: 10px; font: 16px/1.5 'Nunito Sans', Arial, sans-serif; color: #0E3B38; background: #F7F5EF; }
+  body.show-notes #notes { display: block; }
+  @media print {
+    @page { size: 1920px 1080px; margin: 0; }
+    html, body { overflow: visible; background: none; }
+    #stage { position: static; transform: none !important; }
+    .slide, .slide:not(.active) { position: relative; display: flex !important; page-break-after: always; }
+    #bar, #notes { display: none !important; }
+  }
+</style>
+</head>
+<body>
+<div id="stage">
+<section class="slide" id="cover" data-transition="fade" style="background:#0E3B38;color:#F7F5EF;font-family:'Nunito Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;justify-content:center;gap:36px">
+<div style="position:absolute;left:0px;top:0px;width:24px;height:1080px;background:#F2A516"></div>
+<p style="font-size:28px;font-weight:800;letter-spacing:4px;text-transform:uppercase;color:#F2A516">Proyecto de servicio social · Fundación Aprende con Reyhan</p>
+<h1 style="font-family:'Domine', Georgia, serif;font-size:112px;font-weight:700;line-height:1.05;color:#F7F5EF">Plataforma de<br>Servicio Social</h1>
+<p style="font-size:38px;line-height:1.35;color:#CFE3DF;max-width:1300px">Un solo lugar para acompañar a cada estudiante, desde su registro hasta su liberación.</p>
+<div style="display:flex;flex-direction:column;gap:8px;border-left:4px solid #F2A516;padding:4px 0px 4px 28px">
+<p style="font-size:32px;font-weight:700;color:#F7F5EF">Rene Mauricio Castillo Martinez</p>
+<p style="font-size:26px;color:#9FC4BE">Licenciatura en Ingeniería Informática · El Salvador · Octubre 2026</p>
+</div>
+<aside>Buenos días. Mi nombre es Rene Mauricio Castillo Martinez, estudiante de la Licenciatura en Ingeniería Informática, desde El Salvador. Como proyecto de servicio social para la Fundación Aprende con Reyhan desarrollé una plataforma para administrar el servicio social: hoy les presento qué problema resuelve, qué hace para estudiantes y tutores, qué ya funciona y qué decisiones se necesitan para lanzarla.</aside>
+</section>
+<section class="slide" id="reto" data-transition="fade" style="background:#F7F5EF;color:#0E3B38;font-family:'Nunito Sans', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:56px">
+<div style="display:flex;flex-direction:column;gap:16px">
+<p style="font-size:26px;font-weight:800;letter-spacing:3px;text-transform:uppercase;color:#0F766E">El reto</p>
+<h2 style="font-family:'Domine', Georgia, serif;font-size:72px;font-weight:700;line-height:1.1">Lo que buscamos resolver</h2>
+</div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:32px">
+<div style="display:flex;flex-direction:column;gap:12px;background:#FFFDF8;padding:40px;border:1px solid #DCE6E3;border-radius:20px">
+<h3 style="font-size:36px;font-weight:800;color:#0E3B38">Información dispersa</h3>
+<p style="font-size:28px;line-height:1.4;color:#3D4A48">Registros de alumnos, horas y proyectos repartidos entre hojas de cálculo, correos y mensajes.</p>
+</div>
+<div style="display:flex;flex-direction:column;gap:12px;background:#FFFDF8;padding:40px;border:1px solid #DCE6E3;border-radius:20px">
+<h3 style="font-size:36px;font-weight:800;color:#0E3B38">Poca visibilidad del avance</h3>
+<p style="font-size:28px;line-height:1.4;color:#3D4A48">Es difícil saber, en un vistazo, quién va al día y quién necesita apoyo.</p>
+</div>
+<div style="display:flex;flex-direction:column;gap:12px;background:#FFFDF8;padding:40px;border:1px solid #DCE6E3;border-radius:20px">
+<h3 style="font-size:36px;font-weight:800;color:#0E3B38">Mucha carga para los tutores</h3>
+<p style="font-size:28px;line-height:1.4;color:#3D4A48">Revisar propuestas, validar horas y armar reportes consume horas de trabajo manual.</p>
+</div>
+<div style="display:flex;flex-direction:column;gap:12px;background:#FFFDF8;padding:40px;border:1px solid #DCE6E3;border-radius:20px">
+<h3 style="font-size:36px;font-weight:800;color:#0E3B38">Conocimiento que no escala</h3>
+<p style="font-size:28px;line-height:1.4;color:#3D4A48">Los estudiantes hacen las mismas preguntas una y otra vez sobre requisitos y procesos.</p>
+</div>
+</div>
+<p style="position:absolute;left:128px;bottom:64px;width:1664px;font-size:24px;color:#6B7A77">Proyecto de servicio social · Fundación Aprende con Reyhan</p>
+<aside>Estos son los problemas típicos al administrar servicio social con herramientas sueltas. Ajusta este slide con la experiencia real de la fundación: cuántos alumnos atendemos, cuánto tiempo se va en reportes, qué preguntas se repiten.</aside>
+</section>
+<section class="slide" id="solucion" data-transition="fade" style="background:#E7F0EE;color:#0E3B38;font-family:'Nunito Sans', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:56px">
+<div style="display:flex;flex-direction:column;gap:16px">
+<p style="font-size:26px;font-weight:800;letter-spacing:3px;text-transform:uppercase;color:#0F766E">La solución</p>
+<h2 style="font-family:'Domine', Georgia, serif;font-size:72px;font-weight:700;line-height:1.1">Una plataforma, cuatro piezas</h2>
+</div>
+<div style="display:flex;gap:32px;flex:1">
+<div style="flex:1;display:flex;flex-direction:column;gap:20px;background:#FFFDF8;padding:40px;border-radius:20px">
+<svg class="icon" aria-label="Globe" style="color:#0F766E;width:64px;height:64px;flex:none" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15 15 0 0 1 0 20a15 15 0 0 1 0-20z"/></svg>
+<h3 style="font-size:36px;font-weight:800">Sitio web</h3>
+<p style="font-size:28px;line-height:1.4;color:#3D4A48">Presencia pública con misión, cifras en vivo, blog y convocatoria.</p>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:20px;background:#FFFDF8;padding:40px;border-radius:20px">
+<svg class="icon" aria-label="Users" style="color:#0F766E;width:64px;height:64px;flex:none" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.9"/><path d="M16 3.1a4 4 0 0 1 0 7.8"/></svg>
+<h3 style="font-size:36px;font-weight:800">Seguimiento</h3>
+<p style="font-size:28px;line-height:1.4;color:#3D4A48">Estudiantes, cohortes, proyectos, horas e hitos en un solo lugar.</p>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:20px;background:#FFFDF8;padding:40px;border-radius:20px">
+<svg class="icon" aria-label="Chat" style="color:#0F766E;width:64px;height:64px;flex:none" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+<h3 style="font-size:36px;font-weight:800">Asistente IA</h3>
+<p style="font-size:28px;line-height:1.4;color:#3D4A48">Responde dudas con los reglamentos y guías de la fundación.</p>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:20px;background:#FFFDF8;padding:40px;border-radius:20px">
+<svg class="icon" aria-label="Chart" style="color:#0F766E;width:64px;height:64px;flex:none" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M8 17v-5"/><path d="M13 17V8"/><path d="M18 17v-9"/></svg>
+<h3 style="font-size:36px;font-weight:800">Reportes</h3>
+<p style="font-size:28px;line-height:1.4;color:#3D4A48">Información consolidada para tutores, dirección y donantes.</p>
+</div>
+</div>
+<p style="position:absolute;left:128px;bottom:64px;width:1664px;font-size:24px;color:#6B7A77">Proyecto de servicio social · Fundación Aprende con Reyhan</p>
+<aside>La plataforma junta en una sola herramienta lo que hoy vive en varias: el sitio web, el seguimiento del servicio social, un asistente con inteligencia artificial y los reportes.</aside>
+</section>
+<section class="slide" id="recorrido" data-transition="fade" style="background:#F7F5EF;color:#0E3B38;font-family:'Nunito Sans', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:64px">
+<div style="display:flex;flex-direction:column;gap:16px">
+<p style="font-size:26px;font-weight:800;letter-spacing:3px;text-transform:uppercase;color:#0F766E">Cómo funciona</p>
+<h2 style="font-family:'Domine', Georgia, serif;font-size:72px;font-weight:700;line-height:1.1">El recorrido del estudiante</h2>
+</div>
+<div style="display:flex;align-items:center;gap:12px">
+<div style="flex:1;display:flex;flex-direction:column;gap:12px;background:#FFFDF8;padding:22px;border:1px solid #DCE6E3;border-radius:20px;min-height:300px">
+<p style="font-size:40px;font-weight:800;color:#0F766E">1</p>
+<h3 style="font-size:28px;font-weight:800">Registro</h3>
+<p style="font-size:24px;line-height:1.35;color:#3D4A48">Alta con universidad, sede y país.</p>
+</div>
+<svg aria-hidden="true" style="width:32px;height:24px;flex:none" viewBox="0 0 32 24"><path d="M0 8h18V0l14 12l-14 12v-8H0z" fill="#F2A516"/></svg>
+<div style="flex:1;display:flex;flex-direction:column;gap:12px;background:#FFFDF8;padding:22px;border:1px solid #DCE6E3;border-radius:20px;min-height:300px">
+<p style="font-size:40px;font-weight:800;color:#0F766E">2</p>
+<h3 style="font-size:28px;font-weight:800">Cohorte</h3>
+<p style="font-size:24px;line-height:1.35;color:#3D4A48">Grupo con tutor y horas requeridas.</p>
+</div>
+<svg aria-hidden="true" style="width:32px;height:24px;flex:none" viewBox="0 0 32 24"><path d="M0 8h18V0l14 12l-14 12v-8H0z" fill="#F2A516"/></svg>
+<div style="flex:1;display:flex;flex-direction:column;gap:12px;background:#FFFDF8;padding:22px;border:1px solid #DCE6E3;border-radius:20px;min-height:300px">
+<p style="font-size:40px;font-weight:800;color:#0F766E">3</p>
+<h3 style="font-size:28px;font-weight:800">Proyecto</h3>
+<p style="font-size:24px;line-height:1.35;color:#3D4A48">El estudiante propone su proyecto.</p>
+</div>
+<svg aria-hidden="true" style="width:32px;height:24px;flex:none" viewBox="0 0 32 24"><path d="M0 8h18V0l14 12l-14 12v-8H0z" fill="#F2A516"/></svg>
+<div style="flex:1;display:flex;flex-direction:column;gap:12px;background:#FFFDF8;padding:22px;border:1px solid #DCE6E3;border-radius:20px;min-height:300px">
+<p style="font-size:40px;font-weight:800;color:#0F766E">4</p>
+<h3 style="font-size:28px;font-weight:800">Aprobación</h3>
+<p style="font-size:24px;line-height:1.35;color:#3D4A48">El tutor aprueba o pide cambios.</p>
+</div>
+<svg aria-hidden="true" style="width:32px;height:24px;flex:none" viewBox="0 0 32 24"><path d="M0 8h18V0l14 12l-14 12v-8H0z" fill="#F2A516"/></svg>
+<div style="flex:1;display:flex;flex-direction:column;gap:12px;background:#FFFDF8;padding:22px;border:1px solid #DCE6E3;border-radius:20px;min-height:300px">
+<p style="font-size:40px;font-weight:800;color:#0F766E">5</p>
+<h3 style="font-size:28px;font-weight:800">Ejecución</h3>
+<p style="font-size:24px;line-height:1.35;color:#3D4A48">Horas, evidencias e hitos validados.</p>
+</div>
+<svg aria-hidden="true" style="width:32px;height:24px;flex:none" viewBox="0 0 32 24"><path d="M0 8h18V0l14 12l-14 12v-8H0z" fill="#F2A516"/></svg>
+<div style="flex:1;display:flex;flex-direction:column;gap:12px;background:#0F766E;padding:22px;border-radius:20px;min-height:300px">
+<p style="font-size:40px;font-weight:800;color:#F2A516">6</p>
+<h3 style="font-size:28px;font-weight:800;color:#F7F5EF">Liberación</h3>
+<p style="font-size:24px;line-height:1.35;color:#E3F1EE">Proyecto concluido y constancia.</p>
+</div>
+</div>
+<p style="font-size:28px;line-height:1.4;color:#3D4A48;max-width:1400px">Cada paso queda registrado: el tutor sabe en qué etapa está cada estudiante y la fundación tiene el historial completo.</p>
+<p style="position:absolute;left:128px;bottom:64px;width:1664px;font-size:24px;color:#6B7A77">Proyecto de servicio social · Fundación Aprende con Reyhan</p>
+<aside>Este es el camino completo. Lo importante es el paso 4: ningún proyecto avanza sin aprobación del tutor, y en el paso 5 solo cuentan las horas que el tutor valida.</aside>
+</section>
+<section class="slide" id="estudiante" data-transition="fade" style="background:#F7F5EF;color:#0E3B38;font-family:'Nunito Sans', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:row;gap:96px;align-items:center">
+<div style="width:600px;display:flex;flex-direction:column;gap:24px">
+<p style="font-size:26px;font-weight:800;letter-spacing:3px;text-transform:uppercase;color:#0F766E">Para el estudiante</p>
+<h2 style="font-family:'Domine', Georgia, serif;font-size:72px;font-weight:700;line-height:1.1">Claridad sobre qué sigue</h2>
+<p style="font-size:32px;line-height:1.4;color:#3D4A48">Desde su celular o computadora, cada estudiante sabe cuánto lleva y qué le falta.</p>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:20px">
+<div style="display:flex;gap:24px;align-items:center;background:#FFFDF8;padding:28px 32px;border:1px solid #DCE6E3;border-radius:16px">
+<svg class="icon" aria-label="Chart" style="color:#0F766E;width:48px;height:48px;flex:none" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M8 17v-5"/><path d="M13 17V8"/><path d="M18 17v-9"/></svg>
+<p style="font-size:30px;line-height:1.3">Tablero con su avance de horas y de proyecto</p>
+</div>
+<div style="display:flex;gap:24px;align-items:center;background:#FFFDF8;padding:28px 32px;border:1px solid #DCE6E3;border-radius:16px">
+<svg class="icon" aria-label="Lightbulb" style="color:#0F766E;width:48px;height:48px;flex:none" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6"/><path d="M10 22h4"/><path d="M12 2a7 7 0 0 0-4 12.7V16h8v-1.3A7 7 0 0 0 12 2z"/></svg>
+<p style="font-size:30px;line-height:1.3">Propone su proyecto con una guía paso a paso</p>
+</div>
+<div style="display:flex;gap:24px;align-items:center;background:#FFFDF8;padding:28px 32px;border:1px solid #DCE6E3;border-radius:16px">
+<svg class="icon" aria-label="Clock" style="color:#0F766E;width:48px;height:48px;flex:none" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+<p style="font-size:30px;line-height:1.3">Registra sus horas con evidencia</p>
+</div>
+<div style="display:flex;gap:24px;align-items:center;background:#FFFDF8;padding:28px 32px;border:1px solid #DCE6E3;border-radius:16px">
+<svg class="icon" aria-label="CheckCircle" style="color:#0F766E;width:48px;height:48px;flex:none" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 12l3 3l5-6"/></svg>
+<p style="font-size:30px;line-height:1.3">Recibe la retroalimentación de su tutor</p>
+</div>
+<div style="display:flex;gap:24px;align-items:center;background:#FFFDF8;padding:28px 32px;border:1px solid #DCE6E3;border-radius:16px">
+<svg class="icon" aria-label="Chat" style="color:#0F766E;width:48px;height:48px;flex:none" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+<p style="font-size:30px;line-height:1.3">Pregunta al asistente IA a cualquier hora</p>
+</div>
+</div>
+<p style="position:absolute;left:128px;bottom:64px;width:1664px;font-size:24px;color:#6B7A77">Proyecto de servicio social · Fundación Aprende con Reyhan</p>
+<aside>Para el estudiante la plataforma quita incertidumbre: ve sus horas validadas contra las requeridas, el estado de su proyecto y los comentarios de su tutor. Si es buen momento, aquí se puede mostrar la demo con la cuenta de estudiante.</aside>
+</section>
+<section class="slide" id="tutor" data-transition="fade" style="background:#E7F0EE;color:#0E3B38;font-family:'Nunito Sans', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:row;gap:96px;align-items:center">
+<div style="width:600px;display:flex;flex-direction:column;gap:24px">
+<p style="font-size:26px;font-weight:800;letter-spacing:3px;text-transform:uppercase;color:#0F766E">Para el tutor</p>
+<h2 style="font-family:'Domine', Georgia, serif;font-size:72px;font-weight:700;line-height:1.1">Todos sus proyectos en una vista</h2>
+<p style="font-size:32px;line-height:1.4;color:#3D4A48">Menos tiempo capturando y más tiempo acompañando a los estudiantes.</p>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:20px">
+<div style="display:flex;gap:24px;align-items:center;background:#FFFDF8;padding:28px 32px;border-radius:16px">
+<svg class="icon" aria-label="Search" style="color:#0F766E;width:48px;height:48px;flex:none" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+<p style="font-size:30px;line-height:1.3">Tablero con los proyectos por revisar</p>
+</div>
+<div style="display:flex;gap:24px;align-items:center;background:#FFFDF8;padding:28px 32px;border-radius:16px">
+<svg class="icon" aria-label="Warning" style="color:#B45309;width:48px;height:48px;flex:none" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.3 3.9L1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg>
+<p style="font-size:30px;line-height:1.3">Alertas: sin seguimiento o sin horas en 14 días</p>
+</div>
+<div style="display:flex;gap:24px;align-items:center;background:#FFFDF8;padding:28px 32px;border-radius:16px">
+<svg class="icon" aria-label="Book" style="color:#0F766E;width:48px;height:48px;flex:none" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20V2H6.5A2.5 2.5 0 0 0 4 4.5v15z"/><path d="M4 19.5A2.5 2.5 0 0 0 6.5 22H20v-5"/></svg>
+<p style="font-size:30px;line-height:1.3">Bitácora privada de avances por proyecto</p>
+</div>
+<div style="display:flex;gap:24px;align-items:center;background:#FFFDF8;padding:28px 32px;border-radius:16px">
+<svg class="icon" aria-label="Check" style="color:#0F766E;width:48px;height:48px;flex:none" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+<p style="font-size:30px;line-height:1.3">Validación de horas en bloque</p>
+</div>
+<div style="display:flex;gap:24px;align-items:center;background:#FFFDF8;padding:28px 32px;border-radius:16px">
+<svg class="icon" aria-label="Chart" style="color:#0F766E;width:48px;height:48px;flex:none" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M8 17v-5"/><path d="M13 17V8"/><path d="M18 17v-9"/></svg>
+<p style="font-size:30px;line-height:1.3">Reporte consolidado en PDF o Excel</p>
+</div>
+</div>
+<p style="position:absolute;left:128px;bottom:64px;width:1664px;font-size:24px;color:#6B7A77">Proyecto de servicio social · Fundación Aprende con Reyhan</p>
+<aside>El tutor entra y ve de inmediato qué requiere su atención: propuestas por revisar, horas por validar y proyectos que llevan dos semanas sin actividad. Cada nota que registra actualiza el porcentaje de avance, y el reporte consolidado se imprime o exporta en un clic.</aside>
+</section>
+<section class="slide" id="asistente" data-transition="fade" style="background:#0E3B38;color:#F7F5EF;font-family:'Nunito Sans', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:row;gap:96px;align-items:center">
+<div style="width:680px;display:flex;flex-direction:column;gap:28px">
+<p style="font-size:26px;font-weight:800;letter-spacing:3px;text-transform:uppercase;color:#F2A516">Asistente IA</p>
+<h2 style="font-family:'Domine', Georgia, serif;font-size:64px;font-weight:700;line-height:1.1;color:#F7F5EF">Un asistente que conoce a la fundación</h2>
+<ul style="font-size:30px;line-height:1.45;color:#CFE3DF">
+<li>Responde con los reglamentos, guías y contenidos que la fundación carga.</li>
+<li>Conoce el avance de cada estudiante y no inventa requisitos.</li>
+<li>Ayuda al tutor a resumir proyectos y detectar riesgos.</li>
+</ul>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:24px">
+<p style="align-self:end;max-width:720px;font-size:28px;line-height:1.4;background:#0F766E;color:#F7F5EF;padding:24px 32px;border-radius:24px">¿Qué necesito para liberar mi servicio social?</p>
+<p style="align-self:start;max-width:800px;font-size:28px;line-height:1.4;background:#F7F5EF;color:#0E3B38;padding:24px 32px;border-radius:24px">Según el <b>Reglamento de servicio social</b>: completar las horas de tu cohorte, concluir tu proyecto y entregar tu informe final. Llevas 120 de 480 horas validadas.</p>
+<p style="font-size:24px;color:#9FC4BE">Ejemplo ilustrativo de una conversación</p>
+</div>
+<p style="position:absolute;left:128px;bottom:64px;width:1664px;font-size:24px;color:#9FC4BE">Proyecto de servicio social · Fundación Aprende con Reyhan</p>
+<aside>El asistente usa inteligencia artificial. No responde de memoria: primero busca en la base de conocimiento de la fundación y cita el documento. Si no encuentra la respuesta, lo dice y sugiere consultar al tutor. La calidad de las respuestas depende de los documentos que carguemos: reglamento, guías, preguntas frecuentes. Este diálogo es un ejemplo ilustrativo.</aside>
+</section>
+<section class="slide" id="sitio" data-transition="fade" style="background:#F7F5EF;color:#0E3B38;font-family:'Nunito Sans', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:56px">
+<div style="display:flex;flex-direction:column;gap:16px">
+<p style="font-size:26px;font-weight:800;letter-spacing:3px;text-transform:uppercase;color:#0F766E">Sitio web</p>
+<h2 style="font-family:'Domine', Georgia, serif;font-size:72px;font-weight:700;line-height:1.1">Un sitio que se actualiza solo</h2>
+</div>
+<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:32px">
+<div style="display:flex;flex-direction:column;gap:16px;background:#FFFDF8;padding:40px;border-top:8px solid #0F766E;border-radius:16px">
+<h3 style="font-size:34px;font-weight:800">Cifras en vivo</h3>
+<p style="font-size:28px;line-height:1.4;color:#3D4A48">Estudiantes activos, proyectos y horas validadas salen directo de la plataforma.</p>
+</div>
+<div style="display:flex;flex-direction:column;gap:16px;background:#FFFDF8;padding:40px;border-top:8px solid #0F766E;border-radius:16px">
+<h3 style="font-size:34px;font-weight:800">Editable sin programar</h3>
+<p style="font-size:28px;line-height:1.4;color:#3D4A48">Misión, visión, colores, logo, redes y blog se cambian desde el panel.</p>
+</div>
+<div style="display:flex;flex-direction:column;gap:16px;background:#FFFDF8;padding:40px;border-top:8px solid #F2A516;border-radius:16px">
+<h3 style="font-size:34px;font-weight:800">Puerta de entrada</h3>
+<p style="font-size:28px;line-height:1.4;color:#3D4A48">Explica cómo hacer el servicio social y lleva a los estudiantes a la plataforma.</p>
+</div>
+</div>
+<p style="font-size:30px;line-height:1.4;color:#3D4A48;max-width:1500px">La transparencia deja de ser un documento anual: el impacto se ve todos los días.</p>
+<p style="position:absolute;left:128px;bottom:64px;width:1664px;font-size:24px;color:#6B7A77">Proyecto de servicio social · Fundación Aprende con Reyhan</p>
+<aside>El sitio público toma el contenido actual de aprendeconreyhan.org: quiénes somos, misión, visión y transparencia. Lo nuevo es que las cifras se alimentan solas con la actividad real del servicio social, y que cualquier persona de la administración puede editarlo sin depender de un programador.</aside>
+</section>
+<section class="slide" id="replicable" data-transition="fade" style="background:#E7F0EE;color:#0E3B38;font-family:'Nunito Sans', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:56px">
+<div style="display:flex;flex-direction:column;gap:16px">
+<p style="font-size:26px;font-weight:800;letter-spacing:3px;text-transform:uppercase;color:#0F766E">Replicable</p>
+<h2 style="font-family:'Domine', Georgia, serif;font-size:72px;font-weight:700;line-height:1.1">Hecha para otras asociaciones</h2>
+</div>
+<div style="display:flex;align-items:center;gap:48px">
+<div style="width:520px;display:flex;flex-direction:column;gap:16px;background:#0E3B38;padding:48px;border-radius:24px">
+<svg class="icon" aria-label="Settings" style="color:#F2A516;width:56px;height:56px;flex:none" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3a1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5a1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8a1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1a1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5a1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>
+<h3 style="font-size:40px;font-weight:800;color:#F7F5EF">Una sola plataforma</h3>
+<p style="font-size:28px;line-height:1.4;color:#CFE3DF">Mismo sistema, mantenimiento compartido.</p>
+</div>
+<svg aria-hidden="true" style="width:96px;height:48px;flex:none" viewBox="0 0 32 24"><path d="M0 8h18V0l14 12l-14 12v-8H0z" fill="#F2A516"/></svg>
+<div style="flex:1;display:flex;flex-direction:column;gap:20px">
+<div style="display:flex;flex-direction:column;gap:6px;background:#FFFDF8;padding:28px 36px;border-left:8px solid #0F766E;border-radius:16px">
+<h3 style="font-size:32px;font-weight:800">Fundación Aprende con Reyhan</h3>
+<p style="font-size:26px;color:#3D4A48">Su marca, sus estudiantes, su base de conocimiento</p>
+</div>
+<div style="display:flex;flex-direction:column;gap:6px;background:#FFFDF8;padding:28px 36px;border-left:8px solid #4338CA;border-radius:16px">
+<h3 style="font-size:32px;font-weight:800">Asociación aliada</h3>
+<p style="font-size:26px;color:#3D4A48">Su propio sitio y datos separados</p>
+</div>
+<div style="display:flex;flex-direction:column;gap:6px;background:#FFFDF8;padding:28px 36px;border-left:8px dashed #6B7A77;border-radius:16px">
+<h3 style="font-size:32px;font-weight:800">La siguiente…</h3>
+<p style="font-size:26px;color:#3D4A48">Alta en minutos, sin desarrollar de nuevo</p>
+</div>
+</div>
+</div>
+<p style="position:absolute;left:128px;bottom:64px;width:1664px;font-size:24px;color:#6B7A77">Proyecto de servicio social · Fundación Aprende con Reyhan</p>
+<aside>Cada asociación tiene su propia dirección, su marca y sus datos completamente separados. Ya está probado con una segunda organización de demostración. Esto abre la puerta a que la fundación comparta la herramienta con aliados, o la ofrezca como servicio para financiar su mantenimiento.</aside>
+</section>
+<section class="slide" id="beneficios" data-transition="fade" style="background:#F7F5EF;color:#0E3B38;font-family:'Nunito Sans', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:56px">
+<div style="display:flex;flex-direction:column;gap:16px">
+<p style="font-size:26px;font-weight:800;letter-spacing:3px;text-transform:uppercase;color:#0F766E">Beneficios</p>
+<h2 style="font-family:'Domine', Georgia, serif;font-size:72px;font-weight:700;line-height:1.1">Lo que gana la fundación</h2>
+</div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:32px">
+<div style="display:flex;gap:28px;background:#FFFDF8;padding:40px;border:1px solid #DCE6E3;border-radius:20px">
+<svg class="icon" aria-label="Verified" style="color:#0F766E;width:56px;height:56px;flex:none" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l3 2.2l3.7-.2l1.1 3.6L22 10.5l-1.6 3.4l.6 3.7l-3.6 1.2L15 22l-3-1.8L9 22l-2.4-3.2L3 17.6l.6-3.7L2 10.5l2.2-2.9L5.3 4L9 4.2z"/><path d="M8.5 12l2.5 2.5l4.5-5"/></svg>
+<div style="flex:1;display:flex;flex-direction:column;gap:10px">
+<h3 style="font-size:36px;font-weight:800">Transparencia</h3>
+<p style="font-size:28px;line-height:1.4;color:#3D4A48">Cada hora y cada proyecto quedan registrados y validados.</p>
+</div>
+</div>
+<div style="display:flex;gap:28px;background:#FFFDF8;padding:40px;border:1px solid #DCE6E3;border-radius:20px">
+<svg class="icon" aria-label="Clock" style="color:#0F766E;width:56px;height:56px;flex:none" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+<div style="flex:1;display:flex;flex-direction:column;gap:10px">
+<h3 style="font-size:36px;font-weight:800">Tiempo</h3>
+<p style="font-size:28px;line-height:1.4;color:#3D4A48">Menos captura y correos; reportes listos en un clic.</p>
+</div>
+</div>
+<div style="display:flex;gap:28px;background:#FFFDF8;padding:40px;border:1px solid #DCE6E3;border-radius:20px">
+<svg class="icon" aria-label="Activity" style="color:#0F766E;width:56px;height:56px;flex:none" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+<div style="flex:1;display:flex;flex-direction:column;gap:10px">
+<h3 style="font-size:36px;font-weight:800">Impacto medible</h3>
+<p style="font-size:28px;line-height:1.4;color:#3D4A48">Datos de proyectos, comunidades y horas para informes y donantes.</p>
+</div>
+</div>
+<div style="display:flex;gap:28px;background:#FFFDF8;padding:40px;border:1px solid #DCE6E3;border-radius:20px">
+<svg class="icon" aria-label="GraduationCap" style="color:#0F766E;width:56px;height:56px;flex:none" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10L12 5L2 10l10 5z"/><path d="M6 12v5c3 2 9 2 12 0v-5"/><path d="M22 10v6"/></svg>
+<div style="flex:1;display:flex;flex-direction:column;gap:10px">
+<h3 style="font-size:36px;font-weight:800">Escala</h3>
+<p style="font-size:28px;line-height:1.4;color:#3D4A48">Más estudiantes y universidades sin más carga administrativa.</p>
+</div>
+</div>
+</div>
+<p style="position:absolute;left:128px;bottom:64px;width:1664px;font-size:24px;color:#6B7A77">Proyecto de servicio social · Fundación Aprende con Reyhan</p>
+<aside>Para el consejo, los cuatro beneficios clave. La transparencia conecta directamente con nuestro compromiso de rendición de cuentas. El impacto medible nos da evidencia para informes y para buscar nuevos donantes.</aside>
+</section>
+<section class="slide" id="estado" data-transition="fade" style="background:#E7F0EE;color:#0E3B38;font-family:'Nunito Sans', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:48px">
+<div style="display:flex;flex-direction:column;gap:16px">
+<p style="font-size:26px;font-weight:800;letter-spacing:3px;text-transform:uppercase;color:#0F766E">Avance</p>
+<h2 style="font-family:'Domine', Georgia, serif;font-size:72px;font-weight:700;line-height:1.1">Qué ya funciona hoy</h2>
+</div>
+<table style="font-size:28px;color:#0E3B38;background:#FFFDF8;border-radius:16px">
+<tr style="background:#0E3B38"><th style="width:62%;color:#F7F5EF">Módulo</th><th style="width:38%;color:#F7F5EF">Estado</th></tr>
+<tr><td>Sitio web público y blog</td><td style="color:#0F766E">Listo</td></tr>
+<tr><td>Alta de estudiantes, individual y por Excel/CSV</td><td style="color:#0F766E">Listo</td></tr>
+<tr><td>Cohortes y proyectos con aprobación del tutor</td><td style="color:#0F766E">Listo</td></tr>
+<tr><td>Horas, hitos y bitácora del tutor</td><td style="color:#0F766E">Listo</td></tr>
+<tr><td>Reportes consolidados y exportación</td><td style="color:#0F766E">Listo</td></tr>
+<tr><td>Asistente IA</td><td style="color:#B45309">Listo; falta activar la clave de IA</td></tr>
+<tr><td>Publicación en internet</td><td style="color:#B45309">Pendiente</td></tr>
+</table>
+<p style="position:absolute;left:128px;bottom:64px;width:1664px;font-size:24px;color:#6B7A77">Proyecto de servicio social · Fundación Aprende con Reyhan</p>
+<aside>La plataforma ya está construida y probada en un equipo local con datos de ejemplo. Lo que falta para usarla con estudiantes reales es activar el asistente con una clave de IA, cargar nuestros documentos reales y publicarla en internet. Buen momento para la demostración en vivo.</aside>
+</section>
+<section class="slide" id="fases" data-transition="fade" style="background:#F7F5EF;color:#0E3B38;font-family:'Nunito Sans', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:56px">
+<div style="display:flex;flex-direction:column;gap:16px">
+<p style="font-size:26px;font-weight:800;letter-spacing:3px;text-transform:uppercase;color:#0F766E">Siguientes fases</p>
+<h2 style="font-family:'Domine', Georgia, serif;font-size:72px;font-weight:700;line-height:1.1">Hacia dónde puede crecer</h2>
+</div>
+<div style="display:flex;gap:32px">
+<div style="flex:1;display:flex;flex-direction:column;gap:20px;background:#0F766E;padding:40px;border-radius:20px">
+<p style="font-size:26px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:#F2A516">Fase 1 · Lanzamiento</p>
+<ul style="font-size:28px;line-height:1.5;color:#F7F5EF">
+<li>Publicar con dominio propio</li>
+<li>Cargar reglamento y guías reales</li>
+<li>Piloto con una cohorte</li>
+</ul>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:20px;background:#FFFDF8;padding:40px;border:1px solid #DCE6E3;border-radius:20px">
+<p style="font-size:26px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:#0F766E">Fase 2 · Automatizar</p>
+<ul style="font-size:28px;line-height:1.5;color:#3D4A48">
+<li>Constancias en PDF con código QR</li>
+<li>Recordatorios por correo o WhatsApp</li>
+<li>Resumen semanal por IA para tutores</li>
+</ul>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:20px;background:#FFFDF8;padding:40px;border:1px solid #DCE6E3;border-radius:20px">
+<p style="font-size:26px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:#0F766E">Fase 3 · Ampliar</p>
+<ul style="font-size:28px;line-height:1.5;color:#3D4A48">
+<li>Portal para universidades</li>
+<li>Convocatoria en línea</li>
+<li>Tablero público de impacto</li>
+<li>Ofrecerla a otras asociaciones</li>
+</ul>
+</div>
+</div>
+<p style="position:absolute;left:128px;bottom:64px;width:1664px;font-size:24px;color:#6B7A77">Proyecto de servicio social · Fundación Aprende con Reyhan</p>
+<aside>Propongo avanzar por fases. La fase 1 es poner en marcha lo que ya existe con una cohorte piloto. La fase 2 automatiza lo que más tiempo quita. La fase 3 amplía el alcance hacia universidades, donantes y otras asociaciones. Fechas por definir con el consejo: [fecha fase 1], [fecha fase 2], [fecha fase 3].</aside>
+</section>
+<section class="slide" id="decisiones" data-transition="fade" style="background:#F2A516;color:#1F1A0E;font-family:'Nunito Sans', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:56px">
+<div style="display:flex;flex-direction:column;gap:16px">
+<p style="font-size:26px;font-weight:800;letter-spacing:3px;text-transform:uppercase;color:#4A3505">Para el consejo</p>
+<h2 style="font-family:'Domine', Georgia, serif;font-size:80px;font-weight:700;line-height:1.1;color:#1F1A0E">Lo que necesitamos decidir</h2>
+</div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:32px">
+<div style="display:flex;gap:28px;align-items:start;background:#FBE7B8;padding:36px;border-radius:20px">
+<p style="font-family:'Domine', Georgia, serif;font-size:56px;font-weight:700;line-height:1;color:#0E3B38">1</p>
+<div style="flex:1;display:flex;flex-direction:column;gap:8px">
+<h3 style="font-size:34px;font-weight:800">Dónde publicarla</h3>
+<p style="font-size:28px;line-height:1.4;color:#3B3110">Servicio de hospedaje y dominio o subdominio.</p>
+</div>
+</div>
+<div style="display:flex;gap:28px;align-items:start;background:#FBE7B8;padding:36px;border-radius:20px">
+<p style="font-family:'Domine', Georgia, serif;font-size:56px;font-weight:700;line-height:1;color:#0E3B38">2</p>
+<div style="flex:1;display:flex;flex-direction:column;gap:8px">
+<h3 style="font-size:34px;font-weight:800">Cohorte piloto</h3>
+<p style="font-size:28px;line-height:1.4;color:#3B3110">Qué estudiantes y tutores la usan primero.</p>
+</div>
+</div>
+<div style="display:flex;gap:28px;align-items:start;background:#FBE7B8;padding:36px;border-radius:20px">
+<p style="font-family:'Domine', Georgia, serif;font-size:56px;font-weight:700;line-height:1;color:#0E3B38">3</p>
+<div style="flex:1;display:flex;flex-direction:column;gap:8px">
+<h3 style="font-size:34px;font-weight:800">Presupuesto</h3>
+<p style="font-size:28px;line-height:1.4;color:#3B3110">Hospedaje y uso del asistente IA: [monto mensual].</p>
+</div>
+</div>
+<div style="display:flex;gap:28px;align-items:start;background:#FBE7B8;padding:36px;border-radius:20px">
+<p style="font-family:'Domine', Georgia, serif;font-size:56px;font-weight:700;line-height:1;color:#0E3B38">4</p>
+<div style="flex:1;display:flex;flex-direction:column;gap:8px">
+<h3 style="font-size:34px;font-weight:800">Prioridades</h3>
+<p style="font-size:28px;line-height:1.4;color:#3B3110">Qué construir primero en la fase 2.</p>
+</div>
+</div>
+</div>
+<p style="position:absolute;left:128px;bottom:64px;width:1664px;font-size:24px;color:#4A3505">Proyecto de servicio social · Fundación Aprende con Reyhan</p>
+<aside>Cierro con las cuatro decisiones que necesito del consejo para lanzar. Completa el monto del presupuesto antes de presentar: depende del hospedaje elegido y de cuántas preguntas reciba el asistente al mes.</aside>
+</section>
+<section class="slide" id="cierre" data-transition="fade" style="background:#0E3B38;color:#F7F5EF;font-family:'Nunito Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;justify-content:center;gap:36px">
+<div style="position:absolute;left:0px;top:0px;width:24px;height:1080px;background:#F2A516"></div>
+<h1 style="font-family:'Domine', Georgia, serif;font-size:120px;font-weight:700;line-height:1.05;color:#F7F5EF">Gracias</h1>
+<p style="font-size:40px;line-height:1.35;color:#CFE3DF;max-width:1200px">Pasemos a la demostración en vivo y a sus preguntas.</p>
+<div style="display:flex;flex-direction:column;gap:10px;border-left:4px solid #F2A516;padding:4px 0px 4px 28px">
+<p style="font-size:34px;font-weight:700;color:#F7F5EF">Rene Mauricio Castillo Martinez</p>
+<p style="font-size:28px;color:#9FC4BE">Licenciatura en Ingeniería Informática · El Salvador</p>
+<p style="font-size:28px;color:#F2A516">rene.castillo@outlook.com</p>
+<p style="font-size:28px;color:#F2A516">rene.castillo@alumnos.unini.edu.mx</p>
+</div>
+<p style="position:absolute;left:128px;bottom:64px;width:1664px;font-size:24px;color:#9FC4BE">Proyecto de servicio social · Fundación Aprende con Reyhan</p>
+<aside>Agradece y abre la demo. Ruta sugerida: 1) sitio público, 2) entrar como estudiante y ver su tablero, 3) entrar como tutora, aprobar un proyecto y validar horas, 4) mostrar el reporte consolidado, 5) si la clave de IA ya está activa, hacerle una pregunta al asistente.</aside>
+</section>
+</div>
+<div id="notes" aria-live="polite"></div>
+<div id="bar">
+  <button id="prev" aria-label="Anterior">&larr;</button>
+  <span id="count"></span>
+  <button id="next" aria-label="Siguiente">&rarr;</button>
+  <button id="toggle-notes">Notas (N)</button>
+  <button id="fs">Pantalla completa (F)</button>
+</div>
+<script>
+  const slides = [...document.querySelectorAll('.slide')];
+  const stage = document.getElementById('stage');
+  let i = Math.min(Math.max(parseInt(location.hash.slice(1)) - 1 || 0, 0), slides.length - 1);
+  function fit() {
+    const s = Math.min(innerWidth / 1920, innerHeight / 1080);
+    stage.style.transform = `translate(-50%, -50%) scale(${s})`;
+  }
+  function show(n) {
+    i = Math.min(Math.max(n, 0), slides.length - 1);
+    slides.forEach((s, k) => s.classList.toggle('active', k === i));
+    document.getElementById('count').textContent = `${i + 1} / ${slides.length}`;
+    const aside = slides[i].querySelector('aside');
+    document.getElementById('notes').textContent = aside ? aside.textContent : 'Sin notas.';
+    history.replaceState(null, '', '#' + (i + 1));
+  }
+  addEventListener('resize', fit);
+  addEventListener('keydown', e => {
+    if (['ArrowRight', 'PageDown', ' '].includes(e.key)) show(i + 1);
+    else if (['ArrowLeft', 'PageUp'].includes(e.key)) show(i - 1);
+    else if (e.key === 'Home') show(0);
+    else if (e.key === 'End') show(slides.length - 1);
+    else if (e.key.toLowerCase() === 'n') document.body.classList.toggle('show-notes');
+    else if (e.key.toLowerCase() === 'f') toggleFs();
+  });
+  function toggleFs() { document.fullscreenElement ? document.exitFullscreen() : document.documentElement.requestFullscreen(); }
+  document.getElementById('prev').onclick = () => show(i - 1);
+  document.getElementById('next').onclick = () => show(i + 1);
+  document.getElementById('toggle-notes').onclick = () => document.body.classList.toggle('show-notes');
+  document.getElementById('fs').onclick = toggleFs;
+  stage.addEventListener('click', e => { if (!e.target.closest('a')) show(i + (e.clientX < innerWidth / 3 ? -1 : 1)); });
+  fit(); show(i);
+</script>
+</body>
+</html>
