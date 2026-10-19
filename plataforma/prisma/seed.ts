@@ -343,6 +343,11 @@ async function createOrganization(data: {
 }
 
 async function main() {
+  // En el build de Vercel: solo carga datos de ejemplo si SEED_DEMO=1 y la base está vacía.
+  if (process.argv.includes("--si-vacia")) {
+    if (process.env.SEED_DEMO !== "1") return console.log("SEED_DEMO no está activo; no se cargan datos de ejemplo.");
+    if ((await db.organization.count()) > 0) return console.log("La base ya tiene datos; no se cargan datos de ejemplo.");
+  }
   await createOrganization({
     slug: "reyhan",
     name: "Fundación Aprende con Reyhan",

@@ -15,7 +15,8 @@ Sistema multi-organización para que una asociación civil (empezando por **Fund
 cd plataforma
 npm install
 cp .env.example .env        # agrega IA_API_KEY, IA_MODELO y un SESSION_SECRET aleatorio
-npm run setup               # crea la base de datos y carga datos de ejemplo
+npm run db:up               # PostgreSQL local con Docker
+npm run setup               # crea las tablas y carga datos de ejemplo
 npm run dev                 # http://localhost:3000
 ```
 
@@ -62,7 +63,7 @@ Estudiante ── propone proyecto ──► En revisión ──► Tutor: Aprob
 ## Arquitectura
 
 - **Next.js 15** (App Router, Server Components y Server Actions) + **Tailwind CSS 4**.
-- **Prisma** con **SQLite** en desarrollo. En producción cambia `provider = "postgresql"` en `prisma/schema.prisma` y `DATABASE_URL` (Supabase, Neon, RDS…).
+- **Prisma** + **PostgreSQL** (Docker en local, Neon en Vercel).
 - **Sesiones** con cookie JWT firmada (`jose`) y contraseñas con `bcrypt`. Cada server action valida rol y pertenencia a la organización.
 - **Asistente IA** (`src/lib/agent.ts`): modelo de lenguaje en un bucle de herramientas con streaming:
   - `buscar_conocimiento` / `leer_documento` → base de conocimiento de la organización (`src/lib/knowledge.ts`, búsqueda léxica por fragmentos sin dependencias externas).
@@ -92,9 +93,18 @@ Probar la búsqueda de la base de conocimiento sin gastar en IA:
 npx tsx scripts/probar-busqueda.mts "requisitos para liberar el servicio social"
 ```
 
-## Despliegue sugerido
+## Despliegue en Vercel
 
-Vercel (o cualquier hosting Node) + PostgreSQL administrado. Variables: `DATABASE_URL`, `SESSION_SECRET`, `IA_API_KEY`, `IA_MODELO`, `DEFAULT_ORG`.
+1. En [vercel.com/new](https://vercel.com/new) importa el repositorio de GitHub y en **Root Directory** elige `plataforma`.
+2. En el proyecto, pestaña **Storage** → **Create Database** → **Neon (Postgres)** y conéctala al proyecto. Esto crea `DATABASE_URL` y `DATABASE_URL_UNPOOLED`.
+3. En **Settings → Environment Variables** agrega:
+   - `SESSION_SECRET`: cadena aleatoria larga (`openssl rand -hex 32`).
+   - `DEFAULT_ORG`: `reyhan`.
+   - `SEED_DEMO`: `1` para cargar los datos de ejemplo en el primer despliegue (solo si la base está vacía).
+   - `IA_API_KEY` e `IA_MODELO`: para activar el asistente de IA (opcional).
+4. **Deployments → Redeploy**. El build crea las tablas, carga los datos de ejemplo si corresponde y publica el sitio.
+
+Antes de usarla con personas reales cambia las contraseñas de los usuarios de ejemplo o crea los usuarios reales y pon `SEED_DEMO` en `0`.
 
 ## Ideas para siguientes fases
 

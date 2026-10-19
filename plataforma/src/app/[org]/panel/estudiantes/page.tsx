@@ -11,7 +11,7 @@ export default async function StudentsPage({ params, searchParams }: { params: P
   const [students, universities, countries] = await Promise.all([
     db.studentProfile.findMany({
       where: {
-        user: { organizationId: s.organizationId, ...(q ? { OR: [{ name: { contains: q } }, { email: { contains: q } }] } : {}) },
+        user: { organizationId: s.organizationId, ...(q ? { OR: [{ name: { contains: q, mode: "insensitive" } }, { email: { contains: q, mode: "insensitive" } }] } : {}) },
         ...(pais ? { OR: [{ country: pais }, { university: { country: pais } }] } : {}),
         ...(uni ? { universityId: uni } : {}),
         ...(s.role === "TUTOR" ? { memberships: { some: { cohort: { tutorId: s.userId } } } } : {}),
