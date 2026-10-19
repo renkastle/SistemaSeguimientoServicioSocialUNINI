@@ -63,7 +63,7 @@ Estudiante ── propone proyecto ──► En revisión ──► Tutor: Aprob
 ## Arquitectura
 
 - **Next.js 15** (App Router, Server Components y Server Actions) + **Tailwind CSS 4**.
-- **Prisma** + **PostgreSQL** (Docker en local, Neon en Vercel).
+- **Prisma** + **PostgreSQL** (Docker en local, Prisma Postgres en Vercel).
 - **Sesiones** con cookie JWT firmada (`jose`) y contraseñas con `bcrypt`. Cada server action valida rol y pertenencia a la organización.
 - **Asistente IA** (`src/lib/agent.ts`): modelo de lenguaje en un bucle de herramientas con streaming:
   - `buscar_conocimiento` / `leer_documento` → base de conocimiento de la organización (`src/lib/knowledge.ts`, búsqueda léxica por fragmentos sin dependencias externas).
@@ -96,7 +96,7 @@ npx tsx scripts/probar-busqueda.mts "requisitos para liberar el servicio social"
 ## Despliegue en Vercel
 
 1. En [vercel.com/new](https://vercel.com/new) importa el repositorio de GitHub y en **Root Directory** elige `plataforma`.
-2. En el proyecto, pestaña **Storage** → **Create Database** → **Neon (Postgres)** y conéctala al proyecto. Esto crea `DATABASE_URL` y `DATABASE_URL_UNPOOLED`.
+2. En el proyecto, pestaña **Storage** → **Create Database** → **Prisma Postgres** (sin prefijo personalizado) y conéctala al proyecto. Esto crea `DATABASE_URL`.
 3. En **Settings → Environment Variables** agrega:
    - `SESSION_SECRET`: cadena aleatoria larga (`openssl rand -hex 32`).
    - `DEFAULT_ORG`: `reyhan`.
