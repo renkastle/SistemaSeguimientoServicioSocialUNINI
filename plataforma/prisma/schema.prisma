@@ -1,0 +1,251 @@
+// Modelo multi-organización: cada asociación es una Organization y todos
+// los datos cuelgan de ella. Para replicar el sistema basta con crear otra
+// Organization (ver prisma/seed.ts).
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite" // en producción cambiar a "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Organization {
+  id           String   @id @default(cuid())
+  slug         String   @unique
+  name         String
+  shortName    String?
+  tagline      String?
+  about        String?
+  mission      String? // una línea por punto
+  vision       String?
+  transparency String?
+  logoUrl      String?
+  primaryColor String   @default("#0f766e")
+  accentColor  String   @default("#f59e0b")
+  contactEmail String?
+  website      String?
+  facebookUrl  String?
+  instagramUrl String?
+  xUrl         String?
+  youtubeUrl   String?
+  statsJson    String   @default("[]") // [{label, value}]
+  agentPrompt  String? // instrucciones extra para el asistente IA
+  createdAt    DateTime @default(now())
+
+  users        User[]
+  universities University[]
+  cohorts      Cohort[]
+  projects     Project[]
+  knowledge    KnowledgeDoc[]
+  posts        Post[]
+  announcements Announcement[]
+}
+
+model User {
+  id             String       @id @default(cuid())
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  email          String
+  passwordHash   String
+  name           String
+  role           String // ADMIN | TUTOR | STUDENT
+  active         Boolean      @default(true)
+  createdAt      DateTime     @default(now())
+
+  student          StudentProfile?
+  tutoredCohorts   Cohort[]          @relation("CohortTutor")
+  tutoredProjects  Project[]         @relation("ProjectTutor")
+  reviews          ProjectReview[]
+  notes            TutorNote[]
+  chatMessages     ChatMessage[]
+
+  @@unique([organizationId, email])
+}
+
+model University {
+  id             String       @id @default(cuid())
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  name           String
+  campus         String? // sede
+  city           String?
+  country        String
+  contactName    String?
+  contactEmail   String?
+  students       StudentProfile[]
+}
+
+model StudentProfile {
+  id            String      @id @default(cuid())
+  userId        String      @unique
+  user          User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  universityId  String?
+  university    University? @relation(fields: [universityId], references: [id])
+  studentNumber String? // matrícula
+  career        String?
+  semester      Int?
+  country       String?
+  city          String?
+  phone         String?
+  birthDate     DateTime?
+  bio           String?
+  emergencyContact String?
+
+  memberships CohortMember[]
+  projects    Project[]
+  hourLogs    HourLog[]
+}
+
+model Cohort {
+  id             String       @id @default(cuid())
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  name           String
+  description    String?
+  startDate      DateTime
+  endDate        DateTime
+  requiredHours  Int          @default(480)
+  status         String       @default("ACTIVE") // PLANNED | ACTIVE | CLOSED
+  tutorId        String?
+  tutor          User?        @relation("CohortTutor", fields: [tutorId], references: [id])
+  createdAt      DateTime     @default(now())
+
+  members  CohortMember[]
+  projects Project[]
+}
+
+model CohortMember {
+  id        String         @id @default(cuid())
+  cohortId  String
+  cohort    Cohort         @relation(fields: [cohortId], references: [id], onDelete: Cascade)
+  studentId String
+  student   StudentProfile @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  status    String         @default("ACTIVE") // ACTIVE | COMPLETED | DROPPED
+  joinedAt  DateTime       @default(now())
+
+  @@unique([cohortId, studentId])
+}
+
+model Project {
+  id             String         @id @default(cuid())
+  organizationId String
+  organization   Organization   @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  cohortId       String
+  cohort         Cohort         @relation(fields: [cohortId], references: [id], onDelete: Cascade)
+  studentId      String
+  student        StudentProfile @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  tutorId        String?
+  tutor          User?          @relation("ProjectTutor", fields: [tutorId], references: [id])
+  title          String
+  summary        String
+  problem        String?
+  objectives     String?
+  beneficiaries  String?
+  activities     String?
+  community      String? // comunidad / escuela atendida
+  status         String         @default("DRAFT") // DRAFT | SUBMITTED | CHANGES_REQUESTED | APPROVED | COMPLETED | REJECTED
+  progress       Int            @default(0)
+  submittedAt    DateTime?
+  approvedAt     DateTime?
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+
+  reviews    ProjectReview[]
+  notes      TutorNote[]
+  milestones Milestone[]
+  hourLogs   HourLog[]
+}
+
+model ProjectReview {
+  id        String   @id @default(cuid())
+  projectId String
+  project   Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  tutorId   String
+  tutor     User     @relation(fields: [tutorId], references: [id])
+  decision  String // APPROVED | CHANGES_REQUESTED | REJECTED
+  comment   String
+  createdAt DateTime @default(now())
+}
+
+model Milestone {
+  id        String    @id @default(cuid())
+  projectId String
+  project   Project   @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  title     String
+  dueDate   DateTime?
+  done      Boolean   @default(false)
+  doneAt    DateTime?
+}
+
+model HourLog {
+  id          String         @id @default(cuid())
+  studentId   String
+  student     StudentProfile @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  projectId   String?
+  project     Project?       @relation(fields: [projectId], references: [id], onDelete: SetNull)
+  date        DateTime
+  hours       Float
+  activity    String
+  evidenceUrl String?
+  status      String         @default("PENDING") // PENDING | APPROVED | REJECTED
+  createdAt   DateTime       @default(now())
+}
+
+model TutorNote {
+  id        String   @id @default(cuid())
+  projectId String
+  project   Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  tutorId   String
+  tutor     User     @relation(fields: [tutorId], references: [id])
+  content   String
+  progress  Int? // avance % registrado con la nota
+  kind      String   @default("SEGUIMIENTO") // SEGUIMIENTO | REUNION | ALERTA | LOGRO
+  createdAt DateTime @default(now())
+}
+
+model KnowledgeDoc {
+  id             String       @id @default(cuid())
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  title          String
+  category       String       @default("General")
+  content        String
+  sourceUrl      String?
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+}
+
+model ChatMessage {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  role      String // user | assistant
+  content   String
+  createdAt DateTime @default(now())
+}
+
+model Post {
+  id             String       @id @default(cuid())
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  slug           String
+  title          String
+  excerpt        String?
+  content        String
+  published      Boolean      @default(true)
+  createdAt      DateTime     @default(now())
+
+  @@unique([organizationId, slug])
+}
+
+model Announcement {
+  id             String       @id @default(cuid())
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  title          String
+  body           String
+  audience       String       @default("ALL") // ALL | STUDENTS | TUTORS
+  createdAt      DateTime     @default(now())
+}

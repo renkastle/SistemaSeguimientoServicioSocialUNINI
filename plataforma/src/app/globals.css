@@ -1,0 +1,27 @@
+@import "tailwindcss";
+
+:root {
+  --brand: #0f766e;
+  --accent: #f59e0b;
+}
+
+@theme inline {
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+body {
+  background: #f8fafc;
+  color: #0f172a;
+}
+
+.prose-lite p { margin: 0.5rem 0; }
+.prose-lite ul { list-style: disc; padding-left: 1.25rem; margin: 0.5rem 0; }
+.prose-lite ol { list-style: decimal; padding-left: 1.25rem; margin: 0.5rem 0; }
+.prose-lite strong { font-weight: 600; }
+.prose-lite h3 { font-weight: 600; margin-top: 0.75rem; }
+
+@media print {
+  .no-print { display: none !important; }
+  body { background: white; }
+}
