@@ -8,6 +8,7 @@ import { hoursByStudent } from "./stats";
 
 const MODEL = process.env.IA_MODELO ?? "";
 const MAX_TURNS = 8;
+const USE_FALLBACK = process.env.IA_RESPALDO === "1";
 
 const client = new IA({ apiKey: process.env.IA_API_KEY });
 
@@ -180,8 +181,8 @@ export async function runAgent(s: Session, history: IA.Beta.BetaMessageParam[], 
             model: MODEL,
             max_tokens: 16000,
             output_config: { effort: "low" },
-            betas: ["server-side-fallback-2026-07-01"],
-            fallbacks: "default",
+            // Modelo de respaldo ante rechazos: solo si IA_RESPALDO=1 (no todos los modelos lo admiten).
+            ...(USE_FALLBACK ? { betas: ["server-side-fallback-2026-07-01"], fallbacks: "default" as const } : {}),
             cache_control: { type: "ephemeral" },
             system,
             tools: tools.map((t) => t.tool),

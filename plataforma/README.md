@@ -101,7 +101,7 @@ npx tsx scripts/probar-busqueda.mts "requisitos para liberar el servicio social"
    - `SESSION_SECRET`: cadena aleatoria larga (`openssl rand -hex 32`).
    - `DEFAULT_ORG`: `reyhan`.
    - `SEED_DEMO`: `1` para cargar los datos de ejemplo en el primer despliegue (solo si la base está vacía).
-   - `IA_API_KEY` e `IA_MODELO`: para activar el asistente de IA (opcional).
+   - `IA_API_KEY` e `IA_MODELO`: para activar el asistente de IA (opcional). Para el menor costo usa el modelo más económico del proveedor; `IA_RESPALDO=1` solo en modelos que admiten respaldo.
 4. **Deployments → Redeploy**. El build crea las tablas, carga los datos de ejemplo si corresponde y publica el sitio.
 
 Antes de usarla con personas reales cambia las contraseñas de los usuarios de ejemplo o crea los usuarios reales y pon `SEED_DEMO` en `0`.
